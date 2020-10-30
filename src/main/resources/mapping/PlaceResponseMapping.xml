@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd">
+    <mapping>
+        <class-a>ctu.via.bonvoyage.interfaces.response.api.PlaceApiResponse.Item</class-a>
+        <class-b>ctu.via.bonvoyage.interfaces.response.PlaceResponse</class-b>
+        <field>
+            <a>title</a>
+            <b>title</b>
+        </field>
+        <field>
+            <a>address.label</a>
+            <b>addressLabel</b>
+        </field>
+        <field>
+            <a>address.city</a>
+            <b>city</b>
+        </field>
+        <field>
+            <a>position.lat</a>
+            <b>lat</b>
+        </field>
+        <field>
+            <a>position.lng</a>
+            <b>lng</b>
+        </field>
+        <field>
+            <a>phones</a>
+            <b>phones</b>
+        </field>
+        <field>
+            <a>webPages</a>
+            <b>webPages</b>
+        </field>
+        <field>
+            <a>emails</a>
+            <b>emails</b>
+        </field>
+        <field>
+            <a>workingHours.workingTime</a>
+            <b>workingTime</b>
+        </field>
+    </mapping>
+
+</mappings>
