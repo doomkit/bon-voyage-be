@@ -21,6 +21,8 @@ class ApiCommunicationService {
 
     @Value(PropertySource.PLACES_API_DISCOVER_URL)
     private String placeApiUrlDiscover;
+    @Value(PropertySource.PLACES_API_BROWSE_URL)
+    private String placeApiUrlBrowse;
     @Value(PropertySource.PLACES_API_KEY)
     private String placeApiKey;
 
@@ -45,6 +47,25 @@ class ApiCommunicationService {
 
         ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
                 builder.toUriString() + placeName, HttpMethod.GET, prepareHttpEntity(), PlaceApiResponse.class);
+
+        return (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null)
+                ? null : CompletableFuture.completedFuture(response.getBody());
+    }
+
+    CompletableFuture<PlaceApiResponse> callApiForPlaceInfoBrowse(@NotNull String category,
+                                                                  @NotNull String city){
+        LOGGER.debug("callApiForPlaceInfoBrowse {} {}", category, city);
+        Assert.notNull(category, "category cannot be null!");
+        Assert.notNull(city, "city cannot be null!");
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(placeApiUrlBrowse)
+                .queryParam("apiKey", placeApiKey)
+                //.queryParam("at", coordinates) <- city // TODO
+                .queryParam("limit", 50)
+                .queryParam("categories", category);
+
+        ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
+                builder.toUriString(), HttpMethod.GET, prepareHttpEntity(), PlaceApiResponse.class);
 
         return (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null)
                 ? null : CompletableFuture.completedFuture(response.getBody());

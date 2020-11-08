@@ -19,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 @Service
 public class PlaceService {
@@ -36,8 +37,6 @@ public class PlaceService {
     public List<PlaceResponse> getInfoByPlaceName(@NonNull String placeName, String city, String country){
         LOGGER.debug("getInfoByPlaceName {} {} {}", placeName, city, country);
         Assert.notNull(placeName, "placeName cannot be null!");
-
-        List<PlaceResponse> result = new ArrayList<>();
         PlaceApiResponse placeApiResponse;
 
         try {
@@ -46,8 +45,32 @@ public class PlaceService {
             placeApiResponse = completableFuture.get(30, TimeUnit.SECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e){
             LOGGER.debug("getInfoByPlaceNameError {} {} {} {}", placeName, city, country, e);
-            throw new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE, "HERE API call failed!");
+            throw new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE, "HERE Discover API call failed!");
         }
+
+        return prepareResponse(placeApiResponse);
+    }
+
+    public List<PlaceResponse> getInfoByCategory(@NotNull String category, @NotNull String city) {
+        LOGGER.debug("getInfoByCategory {} {}", category, city);
+        Assert.notNull(category, "category cannot be null!");
+        Assert.notNull(city, "city cannot be null!");
+        PlaceApiResponse placeApiResponse;
+
+        try {
+            CompletableFuture<PlaceApiResponse> completableFuture = apiCommunication
+                    .callApiForPlaceInfoBrowse(category, city);
+            placeApiResponse = completableFuture.get(30, TimeUnit.SECONDS);
+        } catch (ExecutionException | InterruptedException | TimeoutException e){
+            LOGGER.debug("getInfoByCategoryError {} {} {}", category, city, e);
+            throw new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE, "HERE Browse API call failed!");
+        }
+
+        return prepareResponse(placeApiResponse);
+    }
+
+    private List<PlaceResponse> prepareResponse(@NotNull PlaceApiResponse placeApiResponse){
+        List<PlaceResponse> result = new ArrayList<>();
 
         if (placeApiResponse != null && placeApiResponse.getItems() != null){
             for (PlaceApiResponse.Item place : placeApiResponse.getItems()){
