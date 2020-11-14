@@ -6,4 +6,7 @@ public class PropertySource {
     public static final String PLACES_API_BROWSE_URL = "${places.browse.api.url}";
     public static final String PLACES_API_KEY = "${places.api.key}";
 
+
+    public static final String JWT_SECRET = "${jwt.secret}";
+
 }
