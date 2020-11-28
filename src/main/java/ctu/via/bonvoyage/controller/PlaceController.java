@@ -38,7 +38,7 @@ class PlaceController {
 
     @RequestMapping(value = RestSource.PLACES_GET, method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    List<PlaceResponse> getPlacesByCategory(@PathParam ("category") @NotNull CategoryEnum category,
+    List<PlaceResponse> getPlacesByCategory(@PathVariable ("category") @NotNull CategoryEnum category,
                                             @RequestParam(name = "city") @NotNull String city) {
         LOGGER.debug("getPlacesByCategory {} {} ", category, city);
 
