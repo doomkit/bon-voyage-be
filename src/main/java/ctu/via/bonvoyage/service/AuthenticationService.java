@@ -4,6 +4,7 @@ import com.github.dozermapper.core.Mapper;
 import ctu.via.bonvoyage.configuration.security.JwtTokenUtil;
 import ctu.via.bonvoyage.interfaces.UserObject;
 import ctu.via.bonvoyage.interfaces.entity.UserEntity;
+import ctu.via.bonvoyage.interfaces.error.BadRequestException;
 import ctu.via.bonvoyage.interfaces.repository.UserRepository;
 import ctu.via.bonvoyage.interfaces.response.JwtResponse;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class AuthenticationService implements UserDetailsService, Authentication
 
         List<UserEntity> userEntities = userRepository.findByEmailIgnoreCaseAndValidIsTrue(email);
         if (userEntities.isEmpty()) {
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "User with email "+ email + "not found!");
+            throw new BadRequestException("User with email " + email + " not found!");
         }
 
         return new User(userEntities.get(0).getEmail(), userEntities.get(0).getPasswordHash(), new ArrayList<>());
@@ -75,7 +76,7 @@ public class AuthenticationService implements UserDetailsService, Authentication
         final UserDetails userDetails = loadUserByUsername(authentication.getPrincipal().toString());
 
         if (!passwordEncoder.matches(authentication.getCredentials().toString(), userDetails.getPassword())){
-            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Bad credentials!");
+            throw new BadRequestException("Bad credentials!");
         }
 
         SecurityContext securityContext = new SecurityContextImpl();
@@ -126,7 +127,7 @@ public class AuthenticationService implements UserDetailsService, Authentication
         List<UserEntity> userEntities = userRepository.findByEmailIgnoreCaseAndValidIsTrue(email);
 
         if (!userEntities.isEmpty() ){
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Email is already in db!");
+            throw new BadRequestException("Email is already in db!");
         }
     }
 

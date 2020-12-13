@@ -9,10 +9,11 @@ public class PlaceResponse {
     private String city;
     private Float lat;
     private Float lng;
-    private List<String> phones;
-    private List<String> webPages;
-    private List<String> emails;
-    private List<String> workingTime;
+    private List<String> phones; // TODO
+    private List<String> webPages; // TODO
+    private List<String> emails; // TODO
+    private List<String> workingTime; // TODO
+    private String info;
 
     public String getTitle() {
         return title;
@@ -84,6 +85,14 @@ public class PlaceResponse {
 
     public void setWorkingTime(List<String> workingTime) {
         this.workingTime = workingTime;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
 }

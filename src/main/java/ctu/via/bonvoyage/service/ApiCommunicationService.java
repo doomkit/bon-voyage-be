@@ -41,8 +41,8 @@ class ApiCommunicationService {
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(placeApiUrlDiscover)
                 .queryParam("apiKey", placeApiKey)
-                //.queryParam("at", "50.073658,14.418540") // TODO
-                .queryParam("in", "countryCode:" + country)
+                .queryParam("at", "50.073658,14.418540") // TODO
+                //.queryParam("in", "countryCode:" + country) // TODO
                 .queryParam("q", "");
 
         ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
@@ -60,7 +60,7 @@ class ApiCommunicationService {
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(placeApiUrlBrowse)
                 .queryParam("apiKey", placeApiKey)
-                //.queryParam("at", coordinates) <- city // TODO
+                .queryParam("at", "50.073658,14.418540") //<- city // TODO
                 .queryParam("limit", 50)
                 .queryParam("categories", category);
 
