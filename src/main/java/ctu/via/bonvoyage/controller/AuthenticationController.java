@@ -41,4 +41,11 @@ class AuthenticationController {
         return authenticationService.createUser(userObject);
     }
 
+    @RequestMapping(value = "public/status", method = RequestMethod.GET)
+    public String getStatus() {
+        LOGGER.debug("getStatus");
+
+        return "Server is running! :P";
+    }
+
 }
