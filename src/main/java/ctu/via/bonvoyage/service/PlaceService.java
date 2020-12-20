@@ -19,7 +19,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 
 @Service
 public class PlaceService {
@@ -34,35 +33,36 @@ public class PlaceService {
         this.mapper = mapper;
     }
 
-    public List<PlaceResponse> getInfoByPlaceName(@NonNull String placeName, String city, String country){
-        LOGGER.debug("getInfoByPlaceName {} {} {}", placeName, city, country);
+    public List<PlaceResponse> getInfoByPlaceName(@NonNull String placeName, String latCity, String lngCity, String country){
+        LOGGER.debug("getInfoByPlaceName {} {} {} {}", placeName, latCity, lngCity, country);
         Assert.notNull(placeName, "placeName cannot be null!");
         PlaceApiResponse placeApiResponse;
 
         try {
             CompletableFuture<PlaceApiResponse> completableFuture = apiCommunication
-                    .callApiForPlaceInfoDiscover(placeName, city, country);
+                    .callApiForPlaceInfoDiscover(placeName, latCity, lngCity, country);
             placeApiResponse = completableFuture.get(30, TimeUnit.SECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e){
-            LOGGER.debug("getInfoByPlaceNameError {} {} {} {}", placeName, city, country, e);
+            LOGGER.debug("getInfoByPlaceNameError {} {} {} {}", placeName, latCity, lngCity, country, e);
             throw new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE, "HERE Discover API call failed!");
         }
 
         return prepareResponse(placeApiResponse);
     }
 
-    public List<PlaceResponse> getInfoByCategory(@NotNull String category, @NotNull String city) {
-        LOGGER.debug("getInfoByCategory {} {}", category, city);
+    public List<PlaceResponse> getInfoByCategory(@NotNull String category, String latCity, String lngCity) {
+        LOGGER.debug("getInfoByCategory {} {} {}", category, latCity, lngCity);
         Assert.notNull(category, "category cannot be null!");
-        Assert.notNull(city, "city cannot be null!");
+        Assert.notNull(latCity, "latCity cannot be null!");
+        Assert.notNull(lngCity, "lngCity cannot be null!");
         PlaceApiResponse placeApiResponse;
 
         try {
             CompletableFuture<PlaceApiResponse> completableFuture = apiCommunication
-                    .callApiForPlaceInfoBrowse(category, city);
+                    .callApiForPlaceInfoBrowse(category, latCity, lngCity);
             placeApiResponse = completableFuture.get(30, TimeUnit.SECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e){
-            LOGGER.debug("getInfoByCategoryError {} {} {}", category, city, e);
+            LOGGER.debug("getInfoByCategoryError {} {} {} {}", category, latCity, lngCity, e);
             throw new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE, "HERE Browse API call failed!");
         }
 

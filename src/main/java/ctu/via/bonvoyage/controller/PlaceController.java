@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -29,20 +28,22 @@ class PlaceController {
     @RequestMapping(value = RestSource.PLACE_GET, method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     List<PlaceResponse> getPlaceByName(@RequestParam(name = "placeName") @NotNull String placeName,
-                                       @RequestParam(name = "city", required = false) String city,
+                                       @RequestParam(name = "latCity", required = false) String latCity,
+                                       @RequestParam(name = "lngCity", required = false) String lngCity,
                                        @RequestParam(name = "country", required = false) @Min (3) @Max(3) String country) {
-        LOGGER.debug("getPlaceByName {} {} {}", placeName, city, country);
+        LOGGER.debug("getPlaceByName {} {} {} {}", placeName, latCity, lngCity, country);
 
-        return placeService.getInfoByPlaceName(placeName, city, country);
+        return placeService.getInfoByPlaceName(placeName, latCity, lngCity, country);
     }
 
     @RequestMapping(value = RestSource.PLACES_GET, method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     List<PlaceResponse> getPlacesByCategory(@PathVariable ("category") @NotNull CategoryEnum category,
-                                            @RequestParam(name = "city") @NotNull String city) {
-        LOGGER.debug("getPlacesByCategory {} {} ", category, city);
+                                            @RequestParam(name = "latCity") @NotNull String latCity,
+                                            @RequestParam(name = "lngCity") @NotNull String lngCity) {
+        LOGGER.debug("getPlacesByCategory {} {} {}", category, latCity, lngCity);
 
-        return placeService.getInfoByCategory(category.getCode(), city);
+        return placeService.getInfoByCategory(category.getCode(), latCity, lngCity);
     }
 
 }

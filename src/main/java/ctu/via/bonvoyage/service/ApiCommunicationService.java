@@ -10,10 +10,13 @@ import org.springframework.http.*;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -35,14 +38,12 @@ class ApiCommunicationService {
     }
 
     CompletableFuture<PlaceApiResponse> callApiForPlaceInfoDiscover(@NonNull String placeName,
-                                                                    String city, String country){
-        LOGGER.debug("callApiForPlaceInfoDiscover {} {} {}", placeName, city, country);
+                                                                    String latCity, String lngCity, String country){
+        LOGGER.debug("callApiForPlaceInfoDiscover {} {} {} {}", placeName, latCity, lngCity, country);
         Assert.notNull(placeName, "placeName cannot be null!");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(placeApiUrlDiscover)
-                .queryParam("apiKey", placeApiKey)
-                .queryParam("at", "50.073658,14.418540") // TODO
-                //.queryParam("in", "countryCode:" + country) // TODO
+                .queryParams(prepareMap(placeApiKey, latCity, lngCity,country, null, null))
                 .queryParam("q", "");
 
         ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
@@ -53,22 +54,39 @@ class ApiCommunicationService {
     }
 
     CompletableFuture<PlaceApiResponse> callApiForPlaceInfoBrowse(@NotNull String category,
-                                                                  @NotNull String city){
-        LOGGER.debug("callApiForPlaceInfoBrowse {} {}", category, city);
+                                                                  @NotNull String latCity, @NotNull String lngCity){
+        LOGGER.debug("callApiForPlaceInfoBrowse {} {} {}", category, latCity, lngCity);
         Assert.notNull(category, "category cannot be null!");
-        Assert.notNull(city, "city cannot be null!");
+        Assert.notNull(latCity, "latCity cannot be null!");
+        Assert.notNull(lngCity, "lngCity cannot be null!");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(placeApiUrlBrowse)
-                .queryParam("apiKey", placeApiKey)
-                .queryParam("at", "50.073658,14.418540") //<- city // TODO
-                .queryParam("limit", 50)
-                .queryParam("categories", category);
+                .queryParams(prepareMap(placeApiKey, latCity, lngCity, null, 50, category));
 
         ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
                 builder.toUriString(), HttpMethod.GET, prepareHttpEntity(), PlaceApiResponse.class);
 
         return (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null)
                 ? null : CompletableFuture.completedFuture(response.getBody());
+    }
+
+    private MultiValueMap<String, String> prepareMap(String apiKey, String atLat, String atLng,
+                                                     String in, Integer limit, String categories){
+        MultiValueMap<String, String> result = new LinkedMultiValueMap<>();
+        result.put("apiKey", Collections.singletonList(apiKey));
+        result.put("at", Collections.singletonList(atLat.concat(",").concat(atLng)));
+
+        if (in != null){
+            result.put("in", Collections.singletonList("countryCode:".concat(in)));
+        }
+        if (limit != null){
+            result.put("limit", Collections.singletonList("50"));
+        }
+        if (categories != null) {
+            result.put("categories", Collections.singletonList(categories));
+        }
+
+        return result;
     }
 
     private HttpEntity<?> prepareHttpEntity(){
