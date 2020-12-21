@@ -1,6 +1,7 @@
 package ctu.via.bonvoyage.service;
 
 import ctu.via.bonvoyage.interfaces.response.api.PlaceApiResponse;
+import ctu.via.bonvoyage.interfaces.response.api.RouteApiResponse;
 import ctu.via.bonvoyage.interfaces.source.PropertySource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,10 @@ class ApiCommunicationService {
     private String placeApiUrlBrowse;
     @Value(PropertySource.PLACES_API_KEY)
     private String placeApiKey;
+    @Value("${route.api.url}")
+    private String routeApiUrl;
+    @Value("${route.api.key}")
+    private String routeApiKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiCommunicationService.class);
     private final RestTemplate restTemplate;
@@ -65,6 +70,28 @@ class ApiCommunicationService {
 
         ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
                 builder.toUriString(), HttpMethod.GET, prepareHttpEntity(), PlaceApiResponse.class);
+
+        return (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null)
+                ? null : CompletableFuture.completedFuture(response.getBody());
+    }
+
+    CompletableFuture<RouteApiResponse> callApiForRouteInfo(@NonNull String origin,
+                                                            @NotNull String destination,
+                                                            @NotNull String tripType){
+        LOGGER.debug("callApiForRouteInfo {} {} {}", origin, destination, tripType);
+        Assert.notNull(origin, "origin cannot be null!");
+        Assert.notNull(destination, "destination cannot be null!");
+        Assert.notNull(tripType, "tripType cannot be null!");
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(routeApiUrl)
+                .queryParam("key", routeApiKey)
+                .queryParam("mode", tripType)
+                .queryParam("language", "cs")
+                .queryParam("origin", "");
+
+        ResponseEntity<RouteApiResponse> response = restTemplate.exchange(
+                builder.toUriString() + origin + "&destination=" + destination,
+                HttpMethod.GET, prepareHttpEntity(), RouteApiResponse.class);
 
         return (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null)
                 ? null : CompletableFuture.completedFuture(response.getBody());

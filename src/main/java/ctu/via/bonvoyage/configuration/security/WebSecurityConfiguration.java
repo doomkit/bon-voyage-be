@@ -13,27 +13,22 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final AuthenticationService authenticationService;
     private final JwtRequestFilter jwtRequestFilter;
 
-    public WebSecurityConfig (@NotNull @Autowired JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-                              @NotNull @Autowired @Lazy AuthenticationService authenticationService,
-                              @NotNull @Autowired @Lazy JwtRequestFilter jwtRequestFilter){
+    public WebSecurityConfiguration(@NotNull @Autowired JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+                                    @NotNull @Autowired @Lazy AuthenticationService authenticationService,
+                                    @NotNull @Autowired @Lazy JwtRequestFilter jwtRequestFilter){
         this.jwtAuthenticationEntryPoint =jwtAuthenticationEntryPoint;
         this.authenticationService = authenticationService;
         this.jwtRequestFilter = jwtRequestFilter;
@@ -53,7 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/public/**").permitAll()
+                    .antMatchers("/public/**", "/swagger-ui/**",
+                            "/v2/api-docs", "/swagger-resources").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login")
                 .permitAll()

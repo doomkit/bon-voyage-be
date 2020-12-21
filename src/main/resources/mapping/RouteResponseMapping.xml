@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd">
+    <mapping>
+        <class-a>ctu.via.bonvoyage.interfaces.response.api.RouteApiResponse</class-a>
+        <class-b>ctu.via.bonvoyage.interfaces.response.RouteResponse</class-b>
+        <field>
+            <a>totalDistance</a>
+            <b>totalDistance</b>
+        </field>
+        <field>
+            <a>totalTime</a>
+            <b>totalTime</b>
+        </field>
+        <field>
+            <a>instructions</a>
+            <b>instructions</b>
+        </field>
+        <field>
+            <a>fare</a>
+            <b>fare</b>
+        </field>
+        <field>
+            <a>routes[0].overviewPolyline.points</a>
+            <b>points</b>
+        </field>
+    </mapping>
+
+</mappings>

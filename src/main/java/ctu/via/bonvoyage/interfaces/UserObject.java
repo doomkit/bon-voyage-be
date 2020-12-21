@@ -1,6 +1,7 @@
 package ctu.via.bonvoyage.interfaces;
 
 import ctu.via.bonvoyage.interfaces.response.JwtResponse;
+import io.swagger.annotations.ApiParam;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.validation.constraints.NotNull;
@@ -32,6 +33,7 @@ public class UserObject {
         return name;
     }
 
+    @ApiParam(required = true)
     public void setName(String name) {
         this.name = name;
     }
@@ -40,6 +42,7 @@ public class UserObject {
         return surname;
     }
 
+    @ApiParam(required = true)
     public void setSurname(String surname) {
         this.surname = surname;
     }
@@ -48,6 +51,7 @@ public class UserObject {
         return email;
     }
 
+    @ApiParam(required = true)
     public void setEmail(String email) {
         this.email = email;
     }
@@ -56,6 +60,7 @@ public class UserObject {
         return password;
     }
 
+    @ApiParam(required = true)
     public void setPassword(String password) {
         this.password = password;
     }
