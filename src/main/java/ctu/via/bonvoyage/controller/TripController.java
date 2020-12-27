@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,9 +44,7 @@ public class TripController {
     TripResponse planTrip(@RequestBody @NotNull @Valid TripRequest request) {
         LOGGER.debug("planTrip {}", request);
 
-//        return routeService.getRoute(request.getSourceLan(), request.getSourceLng(),
-//                request.getDestinationLan(), request.getDestinationLng(), request.getTripType().getValue());
-        return new TripResponse();
+        return tripService.planTrip(request);
     }
 
     @ApiOperation(value = "Update existing trip", tags = "trip",
@@ -59,10 +56,10 @@ public class TripController {
     })
     @RequestMapping(value = RestSource.TRIP_UPDATE, method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    TripResponse updateTrip(@PathVariable @NotNull BigInteger id, @RequestParam @NotNull TripTypeEnum tripType) {
+    TripResponse updateTrip(@PathVariable @NotNull String id, @RequestParam @NotNull TripTypeEnum tripType) {
         LOGGER.debug("updateTrip {} {}", id, tripType);
 
-        return new TripResponse();
+        return tripService.updateTrip(new BigInteger(id), tripType);
     }
 
     @ApiOperation(value = "Delete existing trip", tags = "trip",
@@ -74,10 +71,10 @@ public class TripController {
     })
     @RequestMapping(value = RestSource.TRIP_DELETE, method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteTrip(@PathVariable(value = "id") @NotNull BigInteger id) {
+    void deleteTrip(@PathVariable(value = "id") @NotNull String id) {
         LOGGER.debug("deleteTrip {}", id);
 
-
+        tripService.deleteTrip(new BigInteger(id));
     }
 
     @ApiOperation(value = "Get all user's trips", tags = "trip",
@@ -91,7 +88,7 @@ public class TripController {
     List<TripResponse> getTrips() {
         LOGGER.debug("getTrips");
 
-        return new ArrayList<>();
+        return tripService.getTrips();
     }
 
 }

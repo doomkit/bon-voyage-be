@@ -10,7 +10,7 @@ public class UserEntity {
 
     @Id
     @NotNull
-    @Column(name = "ID")
+    @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 

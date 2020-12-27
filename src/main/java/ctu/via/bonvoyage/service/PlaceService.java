@@ -1,6 +1,7 @@
 package ctu.via.bonvoyage.service;
 
 import com.github.dozermapper.core.Mapper;
+import ctu.via.bonvoyage.interfaces.repository.PlaceRepository;
 import ctu.via.bonvoyage.interfaces.response.PlaceResponse;
 import ctu.via.bonvoyage.interfaces.response.api.PlaceApiResponse;
 import org.slf4j.Logger;
@@ -23,12 +24,15 @@ import java.util.concurrent.TimeoutException;
 @Service
 public class PlaceService {
 
+    private final PlaceRepository placeRepository;
     private final ApiCommunicationService apiCommunication;
     private final Mapper mapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(PlaceService.class);
 
-    public PlaceService(@NotNull @Autowired ApiCommunicationService apiCommunication,
+    public PlaceService(@NotNull @Autowired PlaceRepository placeRepository,
+                        @NotNull @Autowired ApiCommunicationService apiCommunication,
                         @NotNull @Autowired Mapper mapper) {
+        this.placeRepository = placeRepository;
         this.apiCommunication = apiCommunication;
         this.mapper = mapper;
     }

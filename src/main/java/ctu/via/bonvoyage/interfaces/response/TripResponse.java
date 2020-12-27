@@ -1,13 +1,18 @@
 package ctu.via.bonvoyage.interfaces.response;
 
+import ctu.via.bonvoyage.interfaces.enums.TripTypeEnum;
+
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 public class TripResponse {
     private BigInteger id;
-    private Destination destinationInfo;
+    private Destination destination;
     private Route route;
     private List<Place> places;
+    private TripTypeEnum tripType;
+    private Date createdAt;
 
     static class Destination extends Place {
         private String info; // TODO
@@ -37,6 +42,8 @@ public class TripResponse {
         private String fare;
         private List<String> instructions;
         private String points;
+        private String originTitle;
+        private String originAddressLabel;
 
         public String getTotalDistance() {
             return totalDistance;
@@ -76,6 +83,22 @@ public class TripResponse {
 
         public void setPoints(String points) {
             this.points = points;
+        }
+
+        public String getOriginTitle() {
+            return originTitle;
+        }
+
+        public void setOriginTitle(String originTitle) {
+            this.originTitle = originTitle;
+        }
+
+        public String getOriginAddressLabel() {
+            return originAddressLabel;
+        }
+
+        public void setOriginAddressLabel(String originAddressLabel) {
+            this.originAddressLabel = originAddressLabel;
         }
 
     }
@@ -173,12 +196,12 @@ public class TripResponse {
         this.id = id;
     }
 
-    public Destination getDestinationInfo() {
-        return destinationInfo;
+    public Destination getDestination() {
+        return destination;
     }
 
-    public void setDestinationInfo(Destination destinationInfo) {
-        this.destinationInfo = destinationInfo;
+    public void setDestination(Destination destination) {
+        this.destination = destination;
     }
 
     public Route getRoute() {
@@ -195,6 +218,22 @@ public class TripResponse {
 
     public void setPlaces(List<Place> places) {
         this.places = places;
+    }
+
+    public TripTypeEnum getTripType() {
+        return tripType;
+    }
+
+    public void setTripType(TripTypeEnum tripType) {
+        this.tripType = tripType;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
 }
