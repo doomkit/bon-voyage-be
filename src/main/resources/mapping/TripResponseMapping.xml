@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd">
+    <mapping>
+        <class-a>ctu.via.bonvoyage.interfaces.entity.TripEntity</class-a>
+        <class-b>ctu.via.bonvoyage.interfaces.response.TripResponse</class-b>
+        <field>
+            <a>tripId</a>
+            <b>id</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringEnumConverter">
+            <a>tripType</a>
+            <b>tripType</b>
+        </field>
+        <field>
+            <a>createdAt</a>
+            <b>createdAt</b>
+        </field>
+
+<!--        destination-->
+        <field>
+            <a>destination.title</a>
+            <b>destination.title</b>
+        </field>
+        <field>
+            <a>destination.addressLabel</a>
+            <b>destination.addressLabel</b>
+        </field>
+        <field>
+            <a>destination.city</a>
+            <b>destination.city</b>
+        </field>
+        <field>
+            <a>destination.lat</a>
+            <b>destination.lat</b>
+        </field>
+        <field>
+            <a>destination.lng</a>
+            <b>destination.lng</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+            <a>destination.phone</a>
+            <b>destination.phones</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+            <a>destination.webPage</a>
+            <b>destination.webPages</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+            <a>destination.email</a>
+            <b>destination.emails</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+            <a>destination.time</a>
+            <b>destination.workingTime</b>
+        </field>
+        <field>
+            <a>destination.info</a>
+            <b>destination.info</b>
+        </field>
+        <field>
+            <a>destination.picture</a>
+            <b>destination.picture</b>
+        </field>
+
+<!--        route-->
+        <field>
+            <a>route.totalDistance</a>
+            <b>route.totalDistance</b>
+        </field>
+        <field>
+            <a>route.totalTime</a>
+            <b>route.totalTime</b>
+        </field>
+        <field>
+            <a>route.fare</a>
+            <b>route.fare</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+            <a>route.instructions</a>
+            <b>route.instructions</b>
+        </field>
+        <field>
+            <a>route.points</a>
+            <b>route.points</b>
+        </field>
+        <field>
+            <a>route.originTitle</a>
+            <b>route.originTitle</b>
+        </field>
+        <field>
+            <a>route.originAddressLabel</a>
+            <b>route.originAddressLabel</b>
+        </field>
+
+        <field>
+            <a>places</a>
+            <b>places</b>
+            <a-hint>ctu.via.bonvoyage.interfaces.entity.PlaceEntity</a-hint>
+            <b-hint>ctu.via.bonvoyage.interfaces.response.TripResponse.Place</b-hint>
+        </field>
+
+
+    </mapping>
+
+</mappings>

@@ -1,6 +1,7 @@
 package ctu.via.bonvoyage.service;
 
 import com.github.dozermapper.core.Mapper;
+import ctu.via.bonvoyage.interfaces.entity.PlaceEntity;
 import ctu.via.bonvoyage.interfaces.repository.PlaceRepository;
 import ctu.via.bonvoyage.interfaces.response.PlaceResponse;
 import ctu.via.bonvoyage.interfaces.response.api.PlaceApiResponse;
@@ -83,6 +84,14 @@ public class PlaceService {
         }
 
         return result;
+    }
+
+    public void deletePlaces(List<PlaceEntity> placeEntities){
+        LOGGER.debug("deletePlaces {}", placeEntities);
+
+        for (PlaceEntity placeEntity : placeEntities){
+            placeRepository.delete(placeEntity);
+        }
     }
 
 }

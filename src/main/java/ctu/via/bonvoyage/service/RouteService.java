@@ -1,6 +1,8 @@
 package ctu.via.bonvoyage.service;
 
 import com.github.dozermapper.core.Mapper;
+import ctu.via.bonvoyage.interfaces.entity.RouteEntity;
+import ctu.via.bonvoyage.interfaces.repository.RouteRepository;
 import ctu.via.bonvoyage.interfaces.response.RouteResponse;
 import ctu.via.bonvoyage.interfaces.response.api.RouteApiResponse;
 import org.slf4j.Logger;
@@ -19,12 +21,15 @@ import java.util.concurrent.TimeoutException;
 @Service
 public class RouteService {
 
+    private final RouteRepository routeRepository;
     private final ApiCommunicationService apiCommunication;
     private final Mapper mapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(RouteService.class);
 
-    RouteService(@NonNull @Autowired ApiCommunicationService apiCommunication,
+    RouteService(@NotNull @Autowired RouteRepository routeRepository,
+                 @NonNull @Autowired ApiCommunicationService apiCommunication,
                  @NonNull @Autowired Mapper mapper){
+        this.routeRepository = routeRepository;
         this.apiCommunication = apiCommunication;
         this.mapper = mapper;
     }
@@ -56,6 +61,12 @@ public class RouteService {
 
         return result;
 
+    }
+
+    public void deleteRoute(RouteEntity routeEntity){
+        LOGGER.debug("deleteRoute {}", routeEntity);
+
+        routeRepository.delete(routeEntity);
     }
 
 //    public RouteResponse getRouteByHistory(@NotNull String email, @NotNull String coordinates, @NotNull String destination){

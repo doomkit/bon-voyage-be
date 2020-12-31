@@ -30,16 +30,16 @@ public class PlaceEntity {
     private String lng;
 
     @Column(name = "PHONES")
-    private String phones;
+    private String phone;
 
     @Column(name = "WEB_PAGES")
-    private String webPages;
+    private String webPage;
 
     @Column(name = "EMAILS")
-    private String emails;
+    private String email;
 
     @Column(name = "WORKING_TIME")
-    private String workingTime;
+    private String time;
 
     @Column(name = "INFO")
     private String info;
@@ -87,40 +87,44 @@ public class PlaceEntity {
         this.lat = lat;
     }
 
+    public String getLng() {
+        return lng;
+    }
+
     public void setLng(String lng) {
         this.lng = lng;
     }
 
-    public String getPhones() {
-        return phones;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhones(String phones) {
-        this.phones = phones;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getWebPages() {
-        return webPages;
+    public String getWebPage() {
+        return webPage;
     }
 
-    public void setWebPages(String webPages) {
-        this.webPages = webPages;
+    public void setWebPage(String webPage) {
+        this.webPage = webPage;
     }
 
-    public String getEmails() {
-        return emails;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmails(String emails) {
-        this.emails = emails;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getWorkingTime() {
-        return workingTime;
+    public String getTime() {
+        return time;
     }
 
-    public void setWorkingTime(String workingTime) {
-        this.workingTime = workingTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getInfo() {

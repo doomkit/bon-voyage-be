@@ -127,4 +127,20 @@ public class RouteEntity {
         this.destinationLng = destinationLng;
     }
 
+    public String getOriginTitle() {
+        return originTitle;
+    }
+
+    public void setOriginTitle(String originTitle) {
+        this.originTitle = originTitle;
+    }
+
+    public String getOriginAddressLabel() {
+        return originAddressLabel;
+    }
+
+    public void setOriginAddressLabel(String originAddressLabel) {
+        this.originAddressLabel = originAddressLabel;
+    }
+
 }

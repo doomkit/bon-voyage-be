@@ -17,7 +17,7 @@ public class TripEntity {
     private BigInteger tripId;
 
     @ManyToOne
-    @JoinColumn(name = "EMAIL")
+    @JoinColumn(name = "USER_ID")
     private UserEntity user;
 
     @OneToOne
