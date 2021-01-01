@@ -12,6 +12,11 @@ Java Spring Boot, PostgreSQL, MediaWiki API, HERE Discover API, HERE Browse API,
 
 ## Development
 
+**Build server for docker**
+
+Install dependencies: `mvn clean install`
+Build server image: `docker build -t bon-voyage-server .`
+
 **Docker**
 
 ```

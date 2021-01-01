@@ -1,7 +1,19 @@
 version: '3.7'
 
 services:
+  server:
+    image: 'bon-voyage-server'
+    restart: always
+    ports:
+      - '8080:8080'
+    build:
+      context: .
+    container_name: app
+    links:
+      - postgres
+
   postgres:
+    container_name: postgres
     build:
       context: ./postgres
       dockerfile: PG.Dockerfile
@@ -14,16 +26,17 @@ services:
     volumes:
       - 'pgdata:/var/lib/postgres/data'
     ports:
-    - '5432:5432'
+      - '5432:5432'
 
   pgweb:
+    container_name: pgweb
     restart: always
     image: sosedoff/pgweb
     ports:
-      - "8081:8081"
+      - '8081:8081'
     environment:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
-    depends_on:
+    links:
       - postgres
 
 volumes:
