@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ctu.via.bonvoyage.service.util.RouteUtil;
 
+import javax.persistence.Column;
 import java.util.List;
 
 public class RouteApiResponse {
@@ -19,6 +20,8 @@ public class RouteApiResponse {
     @JsonIgnore
     private List<String> instructions;
     private String fare;
+    @JsonIgnore
+    private String originTitle;
 
     public static class GeoCodedWaypoints {
         @JsonProperty("place_id")
@@ -364,6 +367,14 @@ public class RouteApiResponse {
 
     public void setFare(String fare) {
         this.fare = fare;
+    }
+
+    public String getOriginTitle() {
+        return originTitle;
+    }
+
+    public void setOriginTitle(String originTitle) {
+        this.originTitle = originTitle;
     }
 
 }

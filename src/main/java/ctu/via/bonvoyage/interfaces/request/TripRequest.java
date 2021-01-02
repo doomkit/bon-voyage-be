@@ -7,11 +7,13 @@ import javax.validation.constraints.NotNull;
 
 public class TripRequest {
 
+    @NotNull
     private String origin;
     @NotNull
     private String originLan;
     @NotNull
     private String originLng;
+    @NotNull
     private String destination;
     @NotNull
     private String destinationLan;

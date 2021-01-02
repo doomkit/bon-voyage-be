@@ -3,7 +3,6 @@ package ctu.via.bonvoyage.service;
 import com.github.dozermapper.core.Mapper;
 import ctu.via.bonvoyage.interfaces.entity.PlaceEntity;
 import ctu.via.bonvoyage.interfaces.repository.PlaceRepository;
-import ctu.via.bonvoyage.interfaces.response.PlaceResponse;
 import ctu.via.bonvoyage.interfaces.response.api.PlaceApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,24 +37,29 @@ public class PlaceService {
         this.mapper = mapper;
     }
 
-    public List<PlaceResponse> getInfoByPlaceName(@NonNull String placeName, String latCity, String lngCity, String country){
-        LOGGER.debug("getInfoByPlaceName {} {} {} {}", placeName, latCity, lngCity, country);
+    public PlaceEntity getInfoByPlaceName(@NonNull String placeName, String latCity, String lngCity){
+        LOGGER.debug("getInfoByPlaceName {} {} {}", placeName, latCity, lngCity);
         Assert.notNull(placeName, "placeName cannot be null!");
         PlaceApiResponse placeApiResponse;
 
         try {
             CompletableFuture<PlaceApiResponse> completableFuture = apiCommunication
-                    .callApiForPlaceInfoDiscover(placeName, latCity, lngCity, country);
+                    .callApiForPlaceInfoDiscover(placeName, latCity, lngCity);
             placeApiResponse = completableFuture.get(30, TimeUnit.SECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e){
-            LOGGER.debug("getInfoByPlaceNameError {} {} {} {}", placeName, latCity, lngCity, country, e);
+            LOGGER.debug("getInfoByPlaceNameError {} {} {}", placeName, latCity, lngCity, e);
             throw new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE, "HERE Discover API call failed!");
         }
 
-        return prepareResponse(placeApiResponse);
+        List<PlaceEntity> places = prepareResponse(placeApiResponse);
+        if (!places.isEmpty()){
+            return placeRepository.save(places.get(0));
+        }
+
+        return null;
     }
 
-    public List<PlaceResponse> getInfoByCategory(@NotNull String category, String latCity, String lngCity) {
+    public List<PlaceEntity> getInfoByCategory(@NotNull String category, String latCity, String lngCity) {
         LOGGER.debug("getInfoByCategory {} {} {}", category, latCity, lngCity);
         Assert.notNull(category, "category cannot be null!");
         Assert.notNull(latCity, "latCity cannot be null!");
@@ -71,15 +75,20 @@ public class PlaceService {
             throw new HttpServerErrorException(HttpStatus.SERVICE_UNAVAILABLE, "HERE Browse API call failed!");
         }
 
-        return prepareResponse(placeApiResponse);
+        List<PlaceEntity> places = prepareResponse(placeApiResponse);
+        if (!places.isEmpty()){
+            return placeRepository.saveAll(places);
+        }
+
+        return null;
     }
 
-    private List<PlaceResponse> prepareResponse(@NotNull PlaceApiResponse placeApiResponse){
-        List<PlaceResponse> result = new ArrayList<>();
+    private List<PlaceEntity> prepareResponse(@NotNull PlaceApiResponse placeApiResponse){
+        List<PlaceEntity> result = new ArrayList<>();
 
         if (placeApiResponse != null && placeApiResponse.getItems() != null){
             for (PlaceApiResponse.Item place : placeApiResponse.getItems()){
-                result.add(mapper.map(place, PlaceResponse.class));
+                result.add(mapper.map(place, PlaceEntity.class));
             }
         }
 

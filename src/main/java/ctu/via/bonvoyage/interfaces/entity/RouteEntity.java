@@ -24,7 +24,7 @@ public class RouteEntity {
     private String fare;
 
     @Column(name = "INSTRUCTIONS")
-    private String instructions;
+    private String instruction;
 
     @Column(name = "POINTS")
     private String points;
@@ -79,12 +79,12 @@ public class RouteEntity {
         this.fare = fare;
     }
 
-    public String getInstructions() {
-        return instructions;
+    public String getInstruction() {
+        return instruction;
     }
 
-    public void setInstructions(String instructions) {
-        this.instructions = instructions;
+    public void setInstruction(String instruction) {
+        this.instruction = instruction;
     }
 
     public String getPoints() {

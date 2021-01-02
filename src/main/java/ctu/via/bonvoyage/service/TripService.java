@@ -2,6 +2,7 @@ package ctu.via.bonvoyage.service;
 
 import com.github.dozermapper.core.Mapper;
 import ctu.via.bonvoyage.interfaces.entity.PlaceEntity;
+import ctu.via.bonvoyage.interfaces.entity.RouteEntity;
 import ctu.via.bonvoyage.interfaces.entity.TripEntity;
 import ctu.via.bonvoyage.interfaces.entity.UserEntity;
 import ctu.via.bonvoyage.interfaces.enums.TripTypeEnum;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -48,7 +50,26 @@ public class TripService {
     public TripResponse planTrip(TripRequest tripRequest){
         LOGGER.debug("planTrip {}", tripRequest);
 
-        return new TripResponse();
+        PlaceEntity destination = placeService.getInfoByPlaceName(tripRequest.getDestination(),
+                tripRequest.getDestinationLan(), tripRequest.getDestinationLng());
+        List<PlaceEntity> places = placeService.getInfoByCategory(tripRequest.getCategory().getCode(),
+                tripRequest.getDestinationLan(), tripRequest.getDestinationLng());
+        RouteEntity route = routeService.getRoute(tripRequest);
+        UserEntity user = getUser();
+
+        if (user != null && destination != null && route != null){
+            TripEntity tripEntity = new TripEntity();
+            tripEntity.setUser(user);
+            tripEntity.setDestination(destination);
+            tripEntity.setRoute(route);
+            tripEntity.setPlaces(places);
+            tripEntity.setTripType(tripRequest.getTripType().getValue());
+            tripEntity.setCreatedAt(new Date());
+
+            return mapper.map(tripRepository.save(tripEntity), TripResponse.class);
+        }
+
+        throw new BadRequestException("Not enough information!");
     }
 
     public TripResponse updateTrip(BigInteger id, TripTypeEnum tripType){
@@ -79,41 +100,38 @@ public class TripService {
         LOGGER.debug("getTrips");
 
         List<TripResponse> result = new ArrayList<>();
+        UserEntity user = getUser();
+        List<TripEntity> tripEntities = tripRepository.findByUser(user);
 
-        List<UserEntity> user = getUser();
-        if (user != null && !user.isEmpty()){
-            List<TripEntity> tripEntities = tripRepository.findByUser(user.get(0));
-
-            for (TripEntity tripEntity : tripEntities){
-                result.add(mapper.map(tripEntity, TripResponse.class));
-            }
+        for (TripEntity tripEntity : tripEntities){
+            result.add(mapper.map(tripEntity, TripResponse.class));
         }
-
 
         return result;
     }
 
-    private List<UserEntity> getUser(){
-        User user = (User) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        return userRepository.findByEmailIgnoreCaseAndValidIsTrue(user.getUsername());
+    private UserEntity getUser(){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<UserEntity> userEntities = userRepository.findByEmailIgnoreCaseAndValidIsTrue(user.getUsername());
+
+        if (userEntities == null || userEntities.isEmpty()){
+            throw new BadRequestException("User not found!");
+        }
+
+        return userEntities.get(0);
     }
 
     private TripEntity checkPermissions(BigInteger id){
         LOGGER.debug("checkPermissions {}", id);
 
-        List<UserEntity> user = getUser();
-        if (user != null && !user.isEmpty()){
-            TripEntity tripEntity = tripRepository.findByTripIdAndUser(id, user.get(0));
+        UserEntity user = getUser();
+        TripEntity tripEntity = tripRepository.findByTripIdAndUser(id, user);
 
-            if (tripEntity == null){
-                throw new BadRequestException("Trip does not exist or user does not have permissions!");
-            }
-
-            return tripEntity;
+        if (tripEntity == null){
+            throw new BadRequestException("Trip does not exist or user does not have permissions!");
         }
 
-        throw new BadRequestException("User not found!");
+        return tripEntity;
     }
 
 }

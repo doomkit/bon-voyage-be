@@ -77,7 +77,7 @@
             <b>route.fare</b>
         </field>
         <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
-            <a>route.instructions</a>
+            <a>route.instruction</a>
             <b>route.instructions</b>
         </field>
         <field>

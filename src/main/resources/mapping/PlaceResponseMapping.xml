@@ -3,7 +3,7 @@
           xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd">
     <mapping>
         <class-a>ctu.via.bonvoyage.interfaces.response.api.PlaceApiResponse.Item</class-a>
-        <class-b>ctu.via.bonvoyage.interfaces.response.PlaceResponse</class-b>
+        <class-b>ctu.via.bonvoyage.interfaces.entity.PlaceEntity</class-b>
         <field>
             <a>title</a>
             <b>title</b>
@@ -26,19 +26,19 @@
         </field>
         <field>
             <a>phones</a>
-            <b>phones</b>
+            <b>phone</b>
         </field>
         <field>
             <a>webPages</a>
-            <b>webPages</b>
+            <b>webPage</b>
         </field>
         <field>
             <a>emails</a>
-            <b>emails</b>
+            <b>email</b>
         </field>
         <field>
             <a>workingHours.workingTime</a>
-            <b>workingTime</b>
+            <b>time</b>
         </field>
     </mapping>
 

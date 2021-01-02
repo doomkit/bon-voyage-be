@@ -3,7 +3,7 @@
           xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd">
     <mapping>
         <class-a>ctu.via.bonvoyage.interfaces.response.api.RouteApiResponse</class-a>
-        <class-b>ctu.via.bonvoyage.interfaces.response.RouteResponse</class-b>
+        <class-b>ctu.via.bonvoyage.interfaces.entity.RouteEntity</class-b>
         <field>
             <a>totalDistance</a>
             <b>totalDistance</b>
@@ -12,9 +12,9 @@
             <a>totalTime</a>
             <b>totalTime</b>
         </field>
-        <field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
             <a>instructions</a>
-            <b>instructions</b>
+            <b>instruction</b>
         </field>
         <field>
             <a>fare</a>
@@ -23,6 +23,30 @@
         <field>
             <a>routes[0].overviewPolyline.points</a>
             <b>points</b>
+        </field>
+        <field>
+            <a>routes[0].legs[0].startLocation.lat</a>
+            <b>originLan</b>
+        </field>
+        <field>
+            <a>routes[0].legs[0].startLocation.lng</a>
+            <b>originLng</b>
+        </field>
+        <field>
+            <a>routes[0].legs[0].endLocation.lat</a>
+            <b>destinationLan</b>
+        </field>
+        <field>
+            <a>routes[0].legs[0].endLocation.lng</a>
+            <b>destinationLng</b>
+        </field>
+        <field>
+            <a>originTitle</a>
+            <b>originTitle</b>
+        </field>
+        <field>
+            <a>routes[0].legs[0].startAddress</a>
+            <b>originAddressLabel</b>
         </field>
     </mapping>
 

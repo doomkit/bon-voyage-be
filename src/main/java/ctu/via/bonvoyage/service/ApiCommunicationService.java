@@ -43,12 +43,12 @@ class ApiCommunicationService {
     }
 
     CompletableFuture<PlaceApiResponse> callApiForPlaceInfoDiscover(@NonNull String placeName,
-                                                                    String latCity, String lngCity, String country){
-        LOGGER.debug("callApiForPlaceInfoDiscover {} {} {} {}", placeName, latCity, lngCity, country);
+                                                                    String latCity, String lngCity){
+        LOGGER.debug("callApiForPlaceInfoDiscover {} {} {}", placeName, latCity, lngCity);
         Assert.notNull(placeName, "placeName cannot be null!");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(placeApiUrlDiscover)
-                .queryParams(prepareMap(placeApiKey, latCity, lngCity,country, null, null))
+                .queryParams(prepareMap(placeApiKey, latCity, lngCity, null, null))
                 .queryParam("q", "");
 
         ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
@@ -66,7 +66,7 @@ class ApiCommunicationService {
         Assert.notNull(lngCity, "lngCity cannot be null!");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(placeApiUrlBrowse)
-                .queryParams(prepareMap(placeApiKey, latCity, lngCity, null, 50, category));
+                .queryParams(prepareMap(placeApiKey, latCity, lngCity, 3, category));
 
         ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
                 builder.toUriString(), HttpMethod.GET, prepareHttpEntity(), PlaceApiResponse.class);
@@ -98,16 +98,13 @@ class ApiCommunicationService {
     }
 
     private MultiValueMap<String, String> prepareMap(String apiKey, String atLat, String atLng,
-                                                     String in, Integer limit, String categories){
+                                                     Integer limit, String categories){
         MultiValueMap<String, String> result = new LinkedMultiValueMap<>();
         result.put("apiKey", Collections.singletonList(apiKey));
         result.put("at", Collections.singletonList(atLat.concat(",").concat(atLng)));
 
-        if (in != null){
-            result.put("in", Collections.singletonList("countryCode:".concat(in)));
-        }
         if (limit != null){
-            result.put("limit", Collections.singletonList("50"));
+            result.put("limit", Collections.singletonList("3"));
         }
         if (categories != null) {
             result.put("categories", Collections.singletonList(categories));

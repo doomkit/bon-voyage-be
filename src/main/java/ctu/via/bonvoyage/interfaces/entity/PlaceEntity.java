@@ -12,7 +12,7 @@ public class PlaceEntity {
     @NotNull
     @Column(name = "PLACE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private BigInteger id;
+    private BigInteger placeId;
 
     @Column(name = "TITLE")
     private String title;
@@ -47,12 +47,12 @@ public class PlaceEntity {
     @Column(name = "PICTURE")
     private String picture;
 
-    public BigInteger getId() {
-        return id;
+    public BigInteger getPlaceId() {
+        return placeId;
     }
 
-    public void setId(BigInteger id) {
-        this.id = id;
+    public void setPlaceId(BigInteger placeId) {
+        this.placeId = placeId;
     }
 
     public String getTitle() {

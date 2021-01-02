@@ -3,7 +3,7 @@ package ctu.via.bonvoyage.service;
 import com.github.dozermapper.core.Mapper;
 import ctu.via.bonvoyage.interfaces.entity.RouteEntity;
 import ctu.via.bonvoyage.interfaces.repository.RouteRepository;
-import ctu.via.bonvoyage.interfaces.response.RouteResponse;
+import ctu.via.bonvoyage.interfaces.request.TripRequest;
 import ctu.via.bonvoyage.interfaces.response.api.RouteApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,33 +34,29 @@ public class RouteService {
         this.mapper = mapper;
     }
 
-    public RouteResponse getRoute(@NotNull String sourceLan, @NotNull String sourceLng,
-                                  @NotNull String destinationLan, @NotNull String destinationLng,
-                                  @NotNull String tripType){
-        LOGGER.debug("getRoute {} {} {} {} {}", sourceLan, sourceLng, destinationLan, destinationLng, tripType);
-        Assert.notNull(sourceLan, "sourceLan cannot be null!");
-        Assert.notNull(sourceLng, "sourceLng cannot be null!");
-        Assert.notNull(destinationLan, "destinationLan cannot be null!");
-        Assert.notNull(destinationLng, "destinationLng cannot be null!");
-        Assert.notNull(tripType, "tripType cannot be null!");
-        RouteResponse result = new RouteResponse();
+    public RouteEntity getRoute(TripRequest tripRequest){
+        LOGGER.debug("getRoute {}", tripRequest);
+        Assert.notNull(tripRequest, "tripRequest cannot be null!");
+        RouteEntity result = null;
         RouteApiResponse routeApiResponse;
 
         try {
-            CompletableFuture<RouteApiResponse> future = apiCommunication
-                    .callApiForRouteInfo(sourceLan + "," + sourceLng, destinationLan + "," + destinationLng, tripType);
+            CompletableFuture<RouteApiResponse> future = apiCommunication.callApiForRouteInfo(tripRequest.getOriginLan() + ","
+                    + tripRequest.getOriginLng(), tripRequest.getDestinationLan() + ","
+                    + tripRequest.getDestinationLng(), tripRequest.getTripType().getValue());
             routeApiResponse = future.get(30, TimeUnit.SECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e){
-            LOGGER.debug("getRoute {} {} {} {} {} {}", sourceLan, sourceLng, destinationLan, destinationLng, tripType, e);
+            LOGGER.debug("getRoute {} {}", tripRequest, e);
             return result;
         }
 
         if ("OK".equals(routeApiResponse.getStatus())){
-            result = mapper.map(routeApiResponse, RouteResponse.class);
+            routeApiResponse.setOriginTitle(tripRequest.getOrigin());
+            result = mapper.map(routeApiResponse, RouteEntity.class);
+            routeRepository.save(result);
         }
 
         return result;
-
     }
 
     public void deleteRoute(RouteEntity routeEntity){
@@ -68,16 +64,5 @@ public class RouteService {
 
         routeRepository.delete(routeEntity);
     }
-
-//    public RouteResponse getRouteByHistory(@NotNull String email, @NotNull String coordinates, @NotNull String destination){
-//        LOGGER.debug("getRoteByHistory {} {} {}", email, coordinates, destination);
-//        TripHistoryEntity entity = tripHistoryService.getLastTripHistory(email);
-//
-//        if (email != null){
-//            return getRoute(entity.getOriginPlace(), coordinates, entity.getTripMode(), email, destination);
-//        }
-//
-//        return null;
-//    }
 
 }
