@@ -48,7 +48,7 @@ class ApiCommunicationService {
         Assert.notNull(placeName, "placeName cannot be null!");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(placeApiUrlDiscover)
-                .queryParams(prepareMap(placeApiKey, latCity, lngCity, null, null))
+                .queryParams(prepareMap(placeApiKey, latCity, lngCity, 1, null))
                 .queryParam("q", "");
 
         ResponseEntity<PlaceApiResponse> response = restTemplate.exchange(
@@ -104,7 +104,7 @@ class ApiCommunicationService {
         result.put("at", Collections.singletonList(atLat.concat(",").concat(atLng)));
 
         if (limit != null){
-            result.put("limit", Collections.singletonList("3"));
+            result.put("limit", Collections.singletonList(Integer.toString(limit)));
         }
         if (categories != null) {
             result.put("categories", Collections.singletonList(categories));

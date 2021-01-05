@@ -47,6 +47,20 @@ public class TripController {
         return tripService.planTrip(request);
     }
 
+    @ApiOperation(value = "Get concrete trip", tags = "trip",
+            notes = "Return concrete trip from DB")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful response", response = TripResponse.class, responseContainer = "List"),
+            @ApiResponse(code = 500, message = "Internal server error", response = Exception.class)
+    })
+    @RequestMapping(value = RestSource.TRIP_GET, method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    TripResponse getTrip(@PathVariable @NotNull String id) {
+        LOGGER.debug("getTrip {}", id);
+
+        return tripService.getTrip(new BigInteger(id));
+    }
+
     @ApiOperation(value = "Update existing trip", tags = "trip",
             notes = "Change route and save to DB")
     @ApiResponses({

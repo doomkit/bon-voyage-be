@@ -12,7 +12,7 @@
             <a>totalTime</a>
             <b>totalTime</b>
         </field>
-        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
             <a>instructions</a>
             <b>instruction</b>
         </field>

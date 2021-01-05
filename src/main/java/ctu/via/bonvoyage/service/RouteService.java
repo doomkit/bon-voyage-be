@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigInteger;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +35,7 @@ public class RouteService {
         this.mapper = mapper;
     }
 
-    public RouteEntity getRoute(TripRequest tripRequest){
+    public RouteEntity getRoute(TripRequest tripRequest, BigInteger id){
         LOGGER.debug("getRoute {}", tripRequest);
         Assert.notNull(tripRequest, "tripRequest cannot be null!");
         RouteEntity result = null;
@@ -53,6 +54,9 @@ public class RouteService {
         if ("OK".equals(routeApiResponse.getStatus())){
             routeApiResponse.setOriginTitle(tripRequest.getOrigin());
             result = mapper.map(routeApiResponse, RouteEntity.class);
+            if (id != null){
+                result.setId(id);
+            }
             routeRepository.save(result);
         }
 

@@ -1,10 +1,7 @@
-package ctu.via.bonvoyage.interfaces.convertor;
+package ctu.via.bonvoyage.interfaces.converter;
 
 import com.github.dozermapper.core.DozerConverter;
 import ctu.via.bonvoyage.interfaces.enums.TripTypeEnum;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class StringEnumConverter extends DozerConverter<String, TripTypeEnum> {
 

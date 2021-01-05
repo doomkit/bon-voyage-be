@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class RouteUtil {
 
     public static void getHtmlInstructions(RouteApiResponse.Route.Leg.Step step){

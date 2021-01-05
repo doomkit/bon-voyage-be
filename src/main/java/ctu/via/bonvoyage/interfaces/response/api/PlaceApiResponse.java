@@ -3,6 +3,7 @@ package ctu.via.bonvoyage.interfaces.response.api;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ctu.via.bonvoyage.interfaces.enums.CategoryEnum;
+import ctu.via.bonvoyage.service.util.PlaceUtil;
 
 
 import java.util.ArrayList;
@@ -503,6 +504,7 @@ public class PlaceApiResponse {
         }
 
         public String getPhones() {
+            PlaceUtil.getPhones(this);
             return phones;
         }
 
@@ -511,6 +513,7 @@ public class PlaceApiResponse {
         }
 
         public String getWebPages() {
+            PlaceUtil.getWebPages(this);
             return webPages;
         }
 
@@ -519,6 +522,7 @@ public class PlaceApiResponse {
         }
 
         public String getEmails() {
+            PlaceUtil.getEmails(this);
             return emails;
         }
 
@@ -527,6 +531,7 @@ public class PlaceApiResponse {
         }
 
         public List<OpeningHours> getOpeningHours() {
+            PlaceUtil.getWorkingHours(this);
             return openingHours;
         }
 

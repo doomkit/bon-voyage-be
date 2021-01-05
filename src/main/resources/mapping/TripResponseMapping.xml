@@ -8,7 +8,7 @@
             <a>tripId</a>
             <b>id</b>
         </field>
-        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringEnumConverter">
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringEnumConverter">
             <a>tripType</a>
             <b>tripType</b>
         </field>
@@ -38,19 +38,19 @@
             <a>destination.lng</a>
             <b>destination.lng</b>
         </field>
-        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
             <a>destination.phone</a>
             <b>destination.phones</b>
         </field>
-        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
             <a>destination.webPage</a>
             <b>destination.webPages</b>
         </field>
-        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
             <a>destination.email</a>
             <b>destination.emails</b>
         </field>
-        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
             <a>destination.time</a>
             <b>destination.workingTime</b>
         </field>
@@ -76,7 +76,7 @@
             <a>route.fare</a>
             <b>route.fare</b>
         </field>
-        <field custom-converter="ctu.via.bonvoyage.interfaces.convertor.StringListConverter">
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
             <a>route.instruction</a>
             <b>route.instructions</b>
         </field>

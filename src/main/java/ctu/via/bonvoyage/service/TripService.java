@@ -54,7 +54,7 @@ public class TripService {
                 tripRequest.getDestinationLan(), tripRequest.getDestinationLng());
         List<PlaceEntity> places = placeService.getInfoByCategory(tripRequest.getCategory().getCode(),
                 tripRequest.getDestinationLan(), tripRequest.getDestinationLng());
-        RouteEntity route = routeService.getRoute(tripRequest);
+        RouteEntity route = routeService.getRoute(tripRequest, null);
         UserEntity user = getUser();
 
         if (user != null && destination != null && route != null){
@@ -75,14 +75,18 @@ public class TripService {
     public TripResponse updateTrip(BigInteger id, TripTypeEnum tripType){
         LOGGER.debug("updateTrip {} {}", id, tripType);
 
-//        TripEntity tripEntity = checkPermissions(id);
-//        RouteResponse routeResponse = routeService.getRoute(tripEntity.getRoute().getOriginLan(),
-//                tripEntity.getRoute().getOriginLng(), tripEntity.getRoute().getDestinationLan(),
-//                tripEntity.getRoute().getDestinationLng(), tripType.getValue());
-//
-//        tripEntity = mapper.map(routeResponse, TripEntity.class);
-//        return mapper.map(tripRepository.save(tripEntity), TripResponse.class);
-        return new TripResponse();
+        TripEntity tripEntity = checkPermissions(id);
+        TripRequest tripRequest = new TripRequest();
+        tripRequest.setOriginLan(tripEntity.getRoute().getOriginLan());
+        tripRequest.setOriginLng(tripEntity.getRoute().getOriginLng());
+        tripRequest.setDestinationLan(tripEntity.getDestination().getLat());
+        tripRequest.setDestinationLng(tripEntity.getDestination().getLng());
+        tripRequest.setTripType(tripType);
+
+        RouteEntity routeResponse = routeService.getRoute(tripRequest, id);
+        tripEntity.setRoute(routeResponse);
+
+        return mapper.map(tripEntity, TripResponse.class);
     }
 
     public void deleteTrip(@NotNull BigInteger id){
@@ -94,6 +98,19 @@ public class TripService {
         list.addAll(tripEntity.getPlaces());
         placeService.deletePlaces(list);
         routeService.deleteRoute(tripEntity.getRoute());
+    }
+
+    public TripResponse getTrip(@NotNull BigInteger id){
+        LOGGER.debug("getTrip {}", id);
+
+        UserEntity user = getUser();
+        TripEntity tripEntity = tripRepository.findByTripIdAndUser(id, user);
+
+        if (tripEntity != null){
+            return mapper.map(tripEntity, TripResponse.class);
+        }
+
+        throw new BadRequestException("Trip not found!");
     }
 
     public List<TripResponse> getTrips(){

@@ -37,7 +37,8 @@ public class PlaceService {
         this.mapper = mapper;
     }
 
-    public PlaceEntity getInfoByPlaceName(@NonNull String placeName, String latCity, String lngCity){
+    public PlaceEntity getInfoByPlaceName(@NonNull String placeName,
+                                          @NotNull String latCity, @NotNull String lngCity){
         LOGGER.debug("getInfoByPlaceName {} {} {}", placeName, latCity, lngCity);
         Assert.notNull(placeName, "placeName cannot be null!");
         PlaceApiResponse placeApiResponse;
@@ -59,7 +60,8 @@ public class PlaceService {
         return null;
     }
 
-    public List<PlaceEntity> getInfoByCategory(@NotNull String category, String latCity, String lngCity) {
+    public List<PlaceEntity> getInfoByCategory(@NotNull String category,
+                                               @NotNull String latCity, @NotNull String lngCity) {
         LOGGER.debug("getInfoByCategory {} {} {}", category, latCity, lngCity);
         Assert.notNull(category, "category cannot be null!");
         Assert.notNull(latCity, "latCity cannot be null!");

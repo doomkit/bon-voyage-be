@@ -1,4 +1,4 @@
-package ctu.via.bonvoyage.interfaces.convertor;
+package ctu.via.bonvoyage.interfaces.converter;
 
 import com.github.dozermapper.core.DozerConverter;
 
