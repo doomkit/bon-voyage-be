@@ -2,6 +2,7 @@ package ctu.via.bonvoyage.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -17,7 +18,8 @@ public class SwaggerConfiguration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(RequestMapping.class)
+                        .and(RequestHandlerSelectors.withClassAnnotation(RestController.class)))
                 .paths(PathSelectors.any())
                 .build();
     }

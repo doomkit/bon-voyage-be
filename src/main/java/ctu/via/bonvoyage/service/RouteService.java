@@ -42,8 +42,8 @@ public class RouteService {
         RouteApiResponse routeApiResponse;
 
         try {
-            CompletableFuture<RouteApiResponse> future = apiCommunication.callApiForRouteInfo(tripRequest.getOriginLan() + ","
-                    + tripRequest.getOriginLng(), tripRequest.getDestinationLan() + ","
+            CompletableFuture<RouteApiResponse> future = apiCommunication.callApiForRouteInfo(tripRequest.getOriginLat() + ","
+                    + tripRequest.getOriginLng(), tripRequest.getDestinationLat() + ","
                     + tripRequest.getDestinationLng(), tripRequest.getTripType().getValue());
             routeApiResponse = future.get(30, TimeUnit.SECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e){

@@ -6,6 +6,7 @@ import ctu.via.bonvoyage.interfaces.request.TripRequest;
 import ctu.via.bonvoyage.interfaces.response.TripResponse;
 import ctu.via.bonvoyage.interfaces.source.RestSource;
 import ctu.via.bonvoyage.service.TripService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -22,6 +23,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 @RestController
+@Api(tags = "trip")
 public class TripController {
 
     private final TripService tripService;
@@ -31,7 +33,7 @@ public class TripController {
         this.tripService = tripService;
     }
 
-    @ApiOperation(value = "Create new trip", tags = "trip",
+    @ApiOperation(value = "Create new trip",
             notes = "Find information, route and save trip")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Successful response", response = TripResponse.class),
@@ -47,7 +49,7 @@ public class TripController {
         return tripService.planTrip(request);
     }
 
-    @ApiOperation(value = "Get concrete trip", tags = "trip",
+    @ApiOperation(value = "Get concrete trip",
             notes = "Return concrete trip from DB")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful response", response = TripResponse.class, responseContainer = "List"),
@@ -61,14 +63,14 @@ public class TripController {
         return tripService.getTrip(new BigInteger(id));
     }
 
-    @ApiOperation(value = "Update existing trip", tags = "trip",
+    @ApiOperation(value = "Update existing trip",
             notes = "Change route and save to DB")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful response", response = TripResponse.class),
             @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class),
             @ApiResponse(code = 500, message = "Internal server error", response = Exception.class)
     })
-    @RequestMapping(value = RestSource.TRIP_UPDATE, method = RequestMethod.PUT,
+    @RequestMapping(value = RestSource.TRIP_UPDATE, method = RequestMethod.PATCH,
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     TripResponse updateTrip(@PathVariable @NotNull String id, @RequestParam @NotNull TripTypeEnum tripType) {
         LOGGER.debug("updateTrip {} {}", id, tripType);
@@ -76,7 +78,7 @@ public class TripController {
         return tripService.updateTrip(new BigInteger(id), tripType);
     }
 
-    @ApiOperation(value = "Delete existing trip", tags = "trip",
+    @ApiOperation(value = "Delete existing trip",
             notes = "Delete trip from DB")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Successful response", response = TripResponse.class),
@@ -91,7 +93,7 @@ public class TripController {
         tripService.deleteTrip(new BigInteger(id));
     }
 
-    @ApiOperation(value = "Get all user's trips", tags = "trip",
+    @ApiOperation(value = "Get all user's trips",
             notes = "Return all saved trips from DB")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful response", response = TripResponse.class, responseContainer = "List"),

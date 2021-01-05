@@ -10,6 +10,6 @@ public class RestSource {
     public static final String TRIP_UPDATE = "secured/trip/{id}";
     public static final String TRIP_DELETE = "secured/trip/{id}";
     public static final String TRIPS_GET = "secured/trips";
-    public static final String TRIP_GET = "secured/trip/{}";
+    public static final String TRIP_GET = "secured/trip/{id}";
 
 }
