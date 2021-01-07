@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping https://dozermapper.github.io/schema/bean-mapping.xsd">
+    <mapping>
+        <class-a>ctu.via.bonvoyage.interfaces.entity.PlaceEntity</class-a>
+        <class-b>ctu.via.bonvoyage.interfaces.response.TripResponse.Place</class-b>
+        <field>
+            <a>title</a>
+            <b>title</b>
+        </field>
+        <field>
+            <a>addressLabel</a>
+            <b>addressLabel</b>
+        </field>
+        <field>
+            <a>city</a>
+            <b>city</b>
+        </field>
+        <field>
+            <a>lat</a>
+            <b>lat</b>
+        </field>
+        <field>
+            <a>lng</a>
+            <b>lng</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
+            <a>phone</a>
+            <b>phones</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
+            <a>webPage</a>
+            <b>webPages</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
+            <a>email</a>
+            <b>emails</b>
+        </field>
+        <field custom-converter="ctu.via.bonvoyage.interfaces.converter.StringListConverter">
+            <a>time</a>
+            <b>workingTime</b>
+        </field>
+    </mapping>
+
+</mappings>

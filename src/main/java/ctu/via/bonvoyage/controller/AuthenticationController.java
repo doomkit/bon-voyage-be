@@ -5,6 +5,7 @@ import ctu.via.bonvoyage.interfaces.error.BadRequestException;
 import ctu.via.bonvoyage.interfaces.request.JwtRequest;
 import ctu.via.bonvoyage.interfaces.source.RestSource;
 import ctu.via.bonvoyage.service.AuthenticationService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -20,17 +21,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
+@Api(tags = "security")
 class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
-    BuildProperties buildProperties;
-
-    public AuthenticationController(@NotNull @Autowired AuthenticationService authenticationService,
-                                    @Autowired BuildProperties buildProperties){
+    public AuthenticationController(@NotNull @Autowired AuthenticationService authenticationService){
         this.authenticationService = authenticationService;
-        this.buildProperties = buildProperties;
     }
 
     @ApiOperation(value = "Authenticate user by email and password", tags = "security",
@@ -63,20 +61,6 @@ class AuthenticationController {
         LOGGER.debug("signUp {}", userObject);
 
         return authenticationService.createUser(userObject);
-    }
-
-    @ApiOperation(value = "Return info about application", tags = "system",
-            notes = "Unsecured endpoint to indicate that BE in running")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Successful response", response = String.class),
-            @ApiResponse(code = 500, message = "Internal server error", response = Exception.class)
-    })
-    @RequestMapping(value = RestSource.INFO, method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String getInfo() {
-        LOGGER.debug("getInfo");
-
-        return buildProperties.getName() + " is running " +
-                "(version " + buildProperties.getVersion() + ", " + buildProperties.getTime() + ")";
     }
 
 }

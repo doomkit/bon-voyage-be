@@ -25,7 +25,8 @@ public class AppConfiguration {
 
         List<String> mappingFiles = Arrays.asList("mapping/PlaceResponseMapping.xml",
                                                 "mapping/RouteResponseMapping.xml",
-                                                "mapping/TripResponseMapping.xml");
+                                                "mapping/TripResponseMapping.xml",
+                                                "mapping/PlaceEntityMapping.xml");
 
         return DozerBeanMapperBuilder.create()
                 .withMappingFiles(mappingFiles)

@@ -103,7 +103,7 @@ public class TripResponse {
 
     }
 
-    static class Place {
+    public static class Place {
         private String title;
         private String addressLabel;
         private String city;

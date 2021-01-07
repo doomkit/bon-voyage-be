@@ -10,13 +10,13 @@ public class TripRequest {
     @NotNull
     private String origin;
     @NotNull
-    private String originLan;
+    private String originLat;
     @NotNull
     private String originLng;
     @NotNull
     private String destination;
     @NotNull
-    private String destinationLan;
+    private String destinationLat;
     @NotNull
     private String destinationLng;
     @NotNull
@@ -32,12 +32,12 @@ public class TripRequest {
         this.origin = origin;
     }
 
-    public String getOriginLan() {
-        return originLan;
+    public String getOriginLat() {
+        return originLat;
     }
 
-    public void setOriginLan(String originLan) {
-        this.originLan = originLan;
+    public void setOriginLat(String originLat) {
+        this.originLat = originLat;
     }
 
     public String getOriginLng() {
@@ -56,12 +56,12 @@ public class TripRequest {
         this.destination = destination;
     }
 
-    public String getDestinationLan() {
-        return destinationLan;
+    public String getDestinationLat() {
+        return destinationLat;
     }
 
-    public void setDestinationLan(String destinationLan) {
-        this.destinationLan = destinationLan;
+    public void setDestinationLat(String destinationLat) {
+        this.destinationLat = destinationLat;
     }
 
     public String getDestinationLng() {

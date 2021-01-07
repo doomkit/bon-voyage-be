@@ -7,6 +7,7 @@ import ctu.via.bonvoyage.interfaces.entity.TripEntity;
 import ctu.via.bonvoyage.interfaces.entity.UserEntity;
 import ctu.via.bonvoyage.interfaces.enums.TripTypeEnum;
 import ctu.via.bonvoyage.interfaces.error.BadRequestException;
+import ctu.via.bonvoyage.interfaces.error.UnauthorizedException;
 import ctu.via.bonvoyage.interfaces.repository.TripRepository;
 import ctu.via.bonvoyage.interfaces.repository.UserRepository;
 import ctu.via.bonvoyage.interfaces.request.TripRequest;
@@ -51,9 +52,9 @@ public class TripService {
         LOGGER.debug("planTrip {}", tripRequest);
 
         PlaceEntity destination = placeService.getInfoByPlaceName(tripRequest.getDestination(),
-                tripRequest.getDestinationLan(), tripRequest.getDestinationLng());
+                tripRequest.getDestinationLat(), tripRequest.getDestinationLng());
         List<PlaceEntity> places = placeService.getInfoByCategory(tripRequest.getCategory().getCode(),
-                tripRequest.getDestinationLan(), tripRequest.getDestinationLng());
+                tripRequest.getDestinationLat(), tripRequest.getDestinationLng());
         RouteEntity route = routeService.getRoute(tripRequest, null);
         UserEntity user = getUser();
 
@@ -77,14 +78,16 @@ public class TripService {
 
         TripEntity tripEntity = checkPermissions(id);
         TripRequest tripRequest = new TripRequest();
-        tripRequest.setOriginLan(tripEntity.getRoute().getOriginLan());
+        tripRequest.setOriginLat(tripEntity.getRoute().getOriginLan());
         tripRequest.setOriginLng(tripEntity.getRoute().getOriginLng());
-        tripRequest.setDestinationLan(tripEntity.getDestination().getLat());
+        tripRequest.setDestinationLat(tripEntity.getDestination().getLat());
         tripRequest.setDestinationLng(tripEntity.getDestination().getLng());
         tripRequest.setTripType(tripType);
 
         RouteEntity routeResponse = routeService.getRoute(tripRequest, id);
         tripEntity.setRoute(routeResponse);
+        tripEntity.setTripType(tripType.getValue());
+        tripRepository.save(tripEntity);
 
         return mapper.map(tripEntity, TripResponse.class);
     }
@@ -128,14 +131,18 @@ public class TripService {
     }
 
     private UserEntity getUser(){
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<UserEntity> userEntities = userRepository.findByEmailIgnoreCaseAndValidIsTrue(user.getUsername());
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            List<UserEntity> userEntities = userRepository.findByEmailIgnoreCaseAndValidIsTrue(user.getUsername());
 
-        if (userEntities == null || userEntities.isEmpty()){
-            throw new BadRequestException("User not found!");
+            if (userEntities == null || userEntities.isEmpty()) {
+                throw new BadRequestException("User not found!");
+            }
+
+            return userEntities.get(0);
+        } else {
+            throw new UnauthorizedException("User is not authorized!");
         }
-
-        return userEntities.get(0);
     }
 
     private TripEntity checkPermissions(BigInteger id){
